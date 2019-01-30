@@ -1,0 +1,18 @@
+---
+- import_tasks: RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- name: Start docker
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Add users to docker group
+  user:
+    name: "{{ item }}"
+    group: docker
+    append: yes
+  loop: "{{ docker_users }}"
+  notify:
+    - restart docker

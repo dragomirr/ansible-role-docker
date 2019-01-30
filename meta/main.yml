@@ -1,0 +1,15 @@
+---
+dependencies: []
+
+galaxy_info:
+  role_name: docker
+  description: Install docker community edition
+  author: Dragomir Radovanovic
+  license: "license (GPLv3)"
+  platforms:
+    - name: EL
+      versions:
+        - 7
+  min_ansible_version: 2.5
+  galaxy_tags:
+    - docker

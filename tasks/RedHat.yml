@@ -1,0 +1,15 @@
+---
+- name: Install dependencies
+  yum:
+    name: "{{ docker_package_dependencies }}"
+    state: "{{ docker_package_dependencies_state }}"
+
+- name: Add docker repo
+  get_url:
+    url: "{{ docker_package_repo }}"
+    dest: /etc/yum.repos.d/docker-ce.repo
+
+- name: Install docker
+  yum:
+    name: docker-ce
+    state: "{{ docker_package_state }}"

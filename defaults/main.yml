@@ -1,0 +1,8 @@
+---
+docker_package_state: present
+docker_package_dependencies_state: present
+docker_package_dependencies:
+  - device-mapper-persistent-data
+  - lvm2
+docker_package_repo: https://download.docker.com/linux/centos/docker-ce.repo
+docker_users: []
