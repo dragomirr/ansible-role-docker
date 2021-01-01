@@ -1,6 +1,8 @@
 # Ansible role: docker
 
-Install docker community edition on EL 7/8 and ubuntu 18.04/20.04. Probably works on fedora/debian, didn't test.
+[![Build Status](https://travis-ci.com/dragomirr/ansible-role-docker.svg?branch=master)](https://travis-ci.com/dragomirr/ansible-role-docker)
+
+Install docker community edition on EL 7/8 and ubuntu 18.04/20.04. Probably works on debian, didn't test.
 
 ## Requirements
 

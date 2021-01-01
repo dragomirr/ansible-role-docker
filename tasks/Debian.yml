@@ -42,3 +42,8 @@
     update_cache: yes
   retries: 3
   delay: 5
+
+- name: Install docker pip package
+  pip:
+    name: docker
+    executable: /usr/bin/pip3

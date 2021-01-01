@@ -7,10 +7,6 @@
   import_tasks: RedHat.yml
   when: ansible_os_family == 'RedHat'
 
-- name: Install docker pip package
-  pip:
-    name: docker
-
 - name: Add users to docker group
   user:
     name: "{{ item }}"
