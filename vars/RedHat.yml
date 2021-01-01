@@ -1,0 +1,5 @@
+---
+docker_package_requirements:
+  - device-mapper-persistent-data
+  - lvm2
+docker_package_repo: https://download.docker.com/linux/centos/docker-ce.repo

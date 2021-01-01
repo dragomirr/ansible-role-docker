@@ -1,0 +1,44 @@
+---
+- name: Include vars
+  include_vars: Debian.yml
+
+- name: Install requirements
+  apt:
+    name: "{{ docker_package_requirements }}"
+    state: present
+    update_cache: yes
+  retries: 3
+  delay: 5
+
+- name: Add gpg key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+  retries: 3
+  delay: 5
+
+- name: Add docker repo
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release | default('xenial') }} stable
+    filename: docker
+
+- name: Install docker
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    state: "{{ docker_package_state }}"
+    update_cache: yes
+  retries: 3
+  delay: 5
+
+- name: Flush handlers if docker just installed
+  meta: flush_handlers
+
+- name: Install python pip
+  apt:
+    name: python3-pip
+    state: present
+    update_cache: yes
+  retries: 3
+  delay: 5

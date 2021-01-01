@@ -1,18 +1,45 @@
 ---
-- import_tasks: RedHat.yml
+- name: Import Ubuntu tasks
+  import_tasks: Debian.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Import CentOS tasks
+  import_tasks: RedHat.yml
   when: ansible_os_family == 'RedHat'
 
-- name: Start docker
-  service:
+- name: Install docker pip package
+  pip:
     name: docker
-    state: started
-    enabled: yes
 
 - name: Add users to docker group
   user:
     name: "{{ item }}"
-    group: docker
+    groups: docker
     append: yes
   loop: "{{ docker_users }}"
   notify:
     - restart docker
+
+- name: Ensure docker is started and enabled
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Run docker containers
+  docker_container:
+    name: "{{ item.name }}"
+    image: "{{ item.image }}"
+    pull: "{{ item.pull | default('yes') }}"
+    network_mode: "{{ item.network_mode | default('bridge') }}"
+    ports: "{{ item.ports | default(omit) }}"
+    restart_policy: "{{ item.restart_policy | default('unless-stopped') }}"
+    user: "{{ item.user | default(omit) }}"
+    state: "{{ item.state | default('started') }}"
+    volumes: "{{ item.volumes | default(omit) }}"
+    mounts: "{{ item.mounts | default(omit) }}"
+    log_driver: "{{ item.log_driver | default(omit) }}"
+    networks: "{{ item.networks | default(omit) }}"
+    links: "{{ item.links | default(omit) }}"
+    env: "{{ item.env | default(omit) }}"
+  loop: "{{ docker_containers }}"

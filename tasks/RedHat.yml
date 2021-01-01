@@ -1,8 +1,22 @@
 ---
-- name: Install dependencies
+- name: Include vars
+  include_vars: RedHat.yml
+
+- name: Install requirements
+  dnf:
+    name: "{{ docker_package_requirements }}"
+    state: present
+  retries: 3
+  delay: 5
+  when: ansible_distribution_major_version == "8"
+
+- name: Install requirements
   yum:
-    name: "{{ docker_package_dependencies }}"
-    state: "{{ docker_package_dependencies_state }}"
+    name: "{{ docker_package_requirements }}"
+    state: present
+  retries: 3
+  delay: 5
+  when: ansible_distribution_major_version == "7"
 
 - name: Add docker repo
   get_url:
@@ -10,6 +24,36 @@
     dest: /etc/yum.repos.d/docker-ce.repo
 
 - name: Install docker
+  dnf:
+    name: docker-ce
+    state: "{{ docker_package_state }}"
+  retries: 3
+  delay: 5
+  when: ansible_distribution_major_version == "8"
+
+- name: Install docker
   yum:
     name: docker-ce
     state: "{{ docker_package_state }}"
+  retries: 3
+  delay: 5
+  when: ansible_distribution_major_version == "7"
+
+- name: Flush handlers if docker just installed
+  meta: flush_handlers
+
+- name: Install python pip
+  dnf:
+    name: python3-pip
+    state: present
+  retries: 3
+  delay: 5
+  when: ansible_distribution_major_version == "8"
+
+- name: Install python pip
+  yum:
+    name: python-pip
+    state: present
+  retries: 3
+  delay: 5
+  when: ansible_distribution_major_version == "7"
